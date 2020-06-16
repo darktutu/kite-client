@@ -82,20 +82,23 @@
 
     <div class="dynamic-image-row"
          v-if="dynamicItem.type === dynamicType.img">
-      <img style="width: 100px; height: 100px"
-           class="preview-picture"
+      <div class="image"
            v-lazy="url"
            v-for="(url, key) in imgAnalyze(dynamicItem.attach)"
            :key="key"
            v-if="url"
            @click="previewImg(url)"
-           alt="" />
+           :style="`background-image: url(${url})`">
+      </div>
     </div>
 
     <div class="dynamic-link-row"
          v-if="dynamicItem.type === dynamicType.link">
+      <span>传送门</span>
       <a :href="dynamicItem.attach"
-         target="_block">{{ dynamicItem.attach }}</a>
+         target="_block">
+        {{ dynamicItem.attach }}
+      </a>
     </div>
 
     <div class="dynamic-topic-row"
@@ -455,24 +458,43 @@ export default {
     }
   }
   .dynamic-link-row {
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    border-radius: 6px;
+    background-color: #81c764;
     a {
-      display: flex;
-      align-items: center;
-      padding: 9px 15px;
-      max-width: 100%;
-      background-color: #fff;
-      border: 1px solid #ebebeb;
-      border-radius: 4px;
+      padding: 5px 8px;
+      color: #fff;
+      display: inline-block;
       box-sizing: border-box;
+    }
+    span {
+      background: #3fdff0;
+      display: inline-block;
+      padding: 5px 5px;
+      flex: 0 0 60px;
+      width: 60px;
+      color: #fff;
+      text-align: center;
     }
   }
   .dynamic-image-row {
-    .preview-picture {
-      width: 100px;
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 100%;
+    .image {
+      flex: 0 1 auto;
+      position: relative;
       height: 100px;
-      overflow: hidden;
-      margin-right: 5px;
-      margin-bottom: 5px;
+      margin-right: 4px;
+      margin-top: 4px;
+      width: 100px;
+      max-width: 100%;
+      background-position: 50%;
+      background-repeat: no-repeat;
+      background-size: cover;
+      cursor: zoom-in;
     }
   }
   .dynamic-topic-row {
@@ -482,7 +504,7 @@ export default {
       line-height: 22px;
       padding: 0 12px;
       border: 1px solid #007fff;
-      border-radius: 14px;
+      border-radius: 6px;
       color: #007fff;
       user-select: none;
     }

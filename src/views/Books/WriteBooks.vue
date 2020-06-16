@@ -7,10 +7,9 @@
         <div class="row mrg-bm20 books-write-content ">
           <div class="col-xs-12 col-sm-4 col-md-3 box-form-group">
             <div class="cover-img">
-              <img v-lazy="write.cover_img"
+              <div class="cover-img-view"
                    v-if="write.cover_img"
-                   class="cover-img-view"
-                   alt="">
+                   :style="`background-image: url(${write.cover_img})`"></div>
               <div class="cover-img-view cover-img-null"
                    v-else>
                 <p>封面图片为空，如果未上传，将采用默认图片</p>
@@ -296,10 +295,10 @@ export default {
       }
     },
     changeUploadCoverImg ({ formData, config }) { // 上传封面图片
-      this.$store.dispatch('books/UPLOAD_BOOKS_COVER_IMG', formData)
+      this.$store.dispatch('common/UPLOAD_FILE', formData)
         .then(result => {
           if (result.state === 'success') {
-            this.write.cover_img = result.data.img
+            this.write.cover_img = result.data.fileUrl
             this.$message.success('上传封面成功')
           } else {
             this.$message.warning(result.message)
@@ -364,11 +363,11 @@ export default {
       var formData = new FormData();
       formData.append('file', $file);
       this.$store
-        .dispatch("books/UPLOAD_BOOKS_COVER_IMG", formData)
+        .dispatch("common/UPLOAD_FILE", formData)
         .then(res => {
           if (res.state === "success") {
             this.$message.success("上传小书图片成功");
-            this.$refs.mavonEditor.$img2Url(pos, res.data.img);
+            this.$refs.mavonEditor.$img2Url(pos, res.data.fileUrl);
           } else {
             this.$message.warning(res.message);
             return false
@@ -454,13 +453,16 @@ export default {
   .books-write-content {
     .cover-img {
       .cover-img-view {
+        position: relative;
+        height: 180px;
+        border: 1px solid #f1f1f1;
+        border-radius: 4px;
         width: 160px;
-        height: 200px;
-        border: 1px solid #e0e0e0;
-        border-radius: 3px;
-        margin-bottom: 10px;
-        display: block;
-        overflow: hidden;
+        max-width: 100%;
+        background-position: 50%;
+        background-repeat: no-repeat;
+        background-size: cover;
+        cursor: zoom-in;
         p {
           font-size: 14px;
           padding: 30px;
